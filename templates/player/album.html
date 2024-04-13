@@ -1,0 +1,140 @@
+{% extends '__base.html' %}
+{% load static %}
+{% load player_time_tags %}
+
+{% block title %}{{ album.name }}{% endblock title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/playlist_detail.css' %}" type="text/css">
+{% endblock styles %}
+{% block content %}
+
+
+    <div class="playlist">
+
+
+        <div class="playlist-header">
+            <img src="{{ album.musics.first.cover.url }}" alt="Playlist Cover" id='playlistMainCover'
+                 class="playlist-cover">
+            <div class="playlist-info">
+                <h1 id="playlist-name">{{ album.name }}</h1>
+                <div class="text-container">
+                    <p class="fw-bold">{{ album.type }}</p>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="song-list" id="song-list">
+            <div class="song-list-buttons">
+                <button class="play-button" id="main-play-pause-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="lime"
+                         class="bi bi-play-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"></path>
+                    </svg>
+                </button>
+                <a href="" class="three-dots">...</a>
+            </div>
+            <div class="song-list-header">
+                <div>#</div>
+                <div>Song Name</div>
+                <div>Album Name</div>
+                <div>Duration</div>
+            </div>
+            {% for song in album.musics.all %}
+                <div class="song" id="{{ song.slug }}">
+                    <div class="song-number">{{ forloop.counter }}</div>
+                    <img src="{{ song.cover.url }}" alt="Song Cover" class="song-cover">
+
+                    <div class="song-title">{{ song.name }}</div>
+                    <div class="song-album">{{ song.album }}</div>
+                    <div class="song-duration">{{ song.play_time|btime }}</div>
+                </div>
+            {% endfor %}
+            <div class="footer">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="audio-player" id="audio-control" style="visibility: hidden">
+        <div class="audio-info">
+            <div class="audio-cover">
+                <img src="cover-image.jpg" alt="Cover Image" id="audio-cover">
+            </div>
+            <div class="audio-details">
+                <div class="audio-title" id="audio-title">Song Title</div>
+                <div class="audio-artist" id="audio-authors">Artist Name</div>
+            </div>
+        </div>
+        <div class="progress-bar-container">
+
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+                </div>
+                <input type="range" min="0" max="100" step="0.1" value="0" id="progressRange">
+            </div>
+
+
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="totalTime">0:00</span>
+            </div>
+        </div>
+        <div class="audio-controls">
+            <button id="prevButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="lime"
+                     class="bi bi-caret-left" viewBox="0 0 16 16">
+                    <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"></path>
+                </svg>
+            </button>
+            <button id="playPauseButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="lime"
+                     class="bi bi-pause-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5m3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5"></path>
+                </svg>
+            </button>
+            <button id="nextButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="lime"
+                     class="bi bi-caret-right" viewBox="0 0 16 16">
+                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"></path>
+                </svg>
+            </button>
+            <button id="repeatButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="lime" class="bi bi-repeat"
+                     viewBox="0 0 16 16">
+                    <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"></path>
+                </svg>
+            </button>
+            <button id="shuffleButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="lime" class="bi bi-shuffle"
+                     viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.6 9.6 0 0 0 7.556 8a9.6 9.6 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.6 10.6 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.6 9.6 0 0 0 6.444 8a9.6 9.6 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5"></path>
+                    <path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192"></path>
+                </svg>
+            </button>
+
+            <button id="volumeButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="lime"
+                     class="bi bi-volume-down-fill" viewBox="0 0 16 16">
+                    <path d="M9 4a.5.5 0 0 0-.812-.39L5.825 5.5H3.5A.5.5 0 0 0 3 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 9 12zm3.025 4a4.5 4.5 0 0 1-1.318 3.182L10 10.475A3.5 3.5 0 0 0 11.025 8 3.5 3.5 0 0 0 10 5.525l.707-.707A4.5 4.5 0 0 1 12.025 8"></path>
+                </svg>
+                <input type="range" class="volume-control" id="volumeControl" step="0.1" min="0" max="100">
+            </button>
+
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/album.js' %}" type="module"></script>
+{% endblock js %}

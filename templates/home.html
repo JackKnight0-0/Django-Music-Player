@@ -1,0 +1,123 @@
+{% extends '__base.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/home_style.css' %}" type="text/css">
+{% endblock styles %}
+{% block content %}
+
+
+    <div class="song-list justify-content-center">
+        {% for music in musics %}
+
+            <div class="song-item">
+                <a href="{% url 'track-detail' music.slug %}"
+                   style="text-decoration: none; color: white; display: flex">
+                    <img class="album-art" src="{{ music.cover.url }}" alt="Album Art">
+                    <div class="song-info">
+                        <p class="song-title">{{ music.name }}</p>
+                        <p class="artist-name">{% for author in music.author_names|slice:2 %}
+                            {% if forloop.last %}
+                                {{ author.name }}
+                            {% else %}
+                                {{ author.name }},
+                            {% endif %}
+                        {% endfor %}</p>
+                    </div>
+                </a>
+                <div class="d-flex">
+
+                    <div class="dropdown" style="margin-right: 3vh">
+                        <button class="btn btn-secondary" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-music-note-list" viewBox="0 0 16 16">
+                                <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2"></path>
+                                <path fill-rule="evenodd" d="M12 3v10h-1V3z"></path>
+                                <path d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1z"></path>
+                                <path fill-rule="evenodd"
+                                      d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5m0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5m0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5"></path>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% if user.is_authenticated %}
+                                <li class="newPlaylist"><a class="dropdown-item" href="#">Create New Playlist</a></li>
+                            {% else %}
+                                <li class="newPlaylist"><a class="dropdown-item" href="{% url 'account_login' %}">Create
+                                    New Playlist</a></li>
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            {% if user_playlists %}
+                                {% for playlist in user_playlists %}
+                                    <li class="playlists" id="playlist-{{ playlist.pk }}"><a class="dropdown-item"
+                                                                                             href="#">{{ playlist.name|truncatechars:10 }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="text-center"><p>You don't have any playlist yet...</p></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    <div class="song-actions" style="padding-right: 3vh" id="favorite-{{ music.slug }}">
+                    
+                    <span class="song-action">
+                    {% if user.is_authenticated %}
+                        {% if music in user_favorites %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
+                                 class="bi bi-heart-fill"
+                                 viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"></path>
+                </svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                 height="16"
+                                 fill="currentColor" class="bi bi-heart"
+                                 viewBox="0 0 16 16">
+  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"></path>
+                </svg>️
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'account_login' %}" style="text-decoration: none; color: white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                 height="16"
+                                 fill="currentColor" class="bi bi-heart"
+                                 viewBox="0 0 16 16">
+  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"></path>
+                </svg>️</a>
+                    {% endif %}
+</span>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+        {% if page_obj.has_other_pages %}
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                {% endif %}
+                {% for page_num in paginator.page_range %}
+                    {% if page_num <= page_obj.number|add:2 and page_num >= page_obj.number|add:-2 %}
+                        {% if page_num == page_obj.number %}
+                            <li><a href="#" class="active">{{ page_num }}</a></li>
+                        {% else %}
+                            <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+    </div>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/home_script.js' %}" type="module"></script>
+{% endblock js %}

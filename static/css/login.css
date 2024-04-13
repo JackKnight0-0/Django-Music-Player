@@ -1,0 +1,18 @@
+.card {
+    width: 400px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #667eea;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #5a6fe6;
+}

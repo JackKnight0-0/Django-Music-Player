@@ -1,0 +1,46 @@
+{% extends '__base.html' %}
+{% load static %}
+{% block title %}PlayList{% endblock title %}
+{% block styles %}
+    <link href="{% static 'css/playlist.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center">
+        {% if playlists %}
+            <div class="playlist-list ">
+                {% for playlist in playlists %}
+                    <div class="playlist-item ">
+                        <a href="{{ playlist.get_absolute_url }}" style="text-decoration: none; color: white">
+
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="playlist-cover"
+                                     style="background-image: url({{ playlist.cover.url }});"></div>
+                                <span class="playlist-title">{{ playlist.name }}</span>
+                            </div>
+                        </a>
+
+                        <div class="dropdown" style="margin-right: 3vh">
+                            <button class="btn btn-secondary" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-three-dots" viewBox="0 0 16 16">
+                                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"></path>
+                                </svg>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item" href="#" id="remove-{{ playlist.pk }}">Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            </div>
+         {% else %}
+            <h1>You don't have any playlist yet!</h1>
+        {% endif %}
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/playlist.js' %}" type="module"></script>
+{% endblock js %}

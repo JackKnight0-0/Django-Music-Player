@@ -1,0 +1,150 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    overflow-y: scroll;
+}
+
+.song-details {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.cover-container {
+    width: 200px;
+}
+
+.cover {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.info-container {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.info-container h2 {
+    margin-top: 0;
+}
+
+.info-container p {
+    margin: 5px 0;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.data {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+}
+
+.statistics {
+    margin: 30px 30px 30px 10vh;
+}
+
+hr {
+    color: gray;
+}
+
+.statistics h3 {
+    margin-top: 0;
+}
+
+.reviews {
+    margin-top: 30px;
+    margin-left: 30px;
+    width: 90vh;
+}
+
+.user-review, .review {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-review .avatar, .review .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-review textarea {
+    flex: 1;
+    height: 50px;
+    padding: 10px;
+}
+
+.review-details {
+    flex: 1;
+}
+
+.review-details p {
+    margin: 0;
+}
+
+.actions button {
+    margin-right: 10px;
+}
+
+.review-history {
+    margin-top: 20px;
+}
+
+h3 {
+    margin-top: 20px;
+}
+
+.author-list {
+    list-style: none;
+    padding: 0;
+}
+
+.author-list li {
+    margin-bottom: 5px;
+}
+
+
+.button-lime {
+    background-color: limegreen;
+    color: #111;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: max-content;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button-lime:hover {
+    background-color: #00ff00;
+}
+
+.show-replies {
+    margin-left: 7vh;
+    cursor: pointer;
+    font-weight: bold;
+    max-width: fit-content;
+}
+
+
+.rounded-button-lime {
+    margin-left: 15px;
+    background: lime;
+    border-radius: 50%;
+    max-height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 55px;
+    width: 55px;
+}
+
+.dropdown-item:hover {
+    background: lime;
+
+}
